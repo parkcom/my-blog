@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Blog</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- FOUC 방지: index.html과 동일한 인라인 테마 초기화. -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var theme =
+            saved ||
+            (matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <h1 class="site-title"><a href="index.html">My Blog</a></h1>
+        <button
+          type="button"
+          class="theme-toggle"
+          aria-label="라이트/다크 모드 전환"
+        >
+          <span class="theme-toggle__icon--light" aria-hidden="true">🌙</span>
+          <span class="theme-toggle__icon--dark" aria-hidden="true">☀️</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page">
+      <a class="back-link" href="index.html">← 글 목록으로</a>
+
+      <article>
+        <header class="post-header" id="post-header" hidden>
+          <h1 class="post-header__title" id="post-title"></h1>
+          <p class="post-header__meta" id="post-meta"></p>
+        </header>
+
+        <div class="post-content" id="post-content">
+          <p class="state-message">글을 불러오는 중…</p>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <p>마크다운으로 쓰는 정적 블로그</p>
+      </div>
+    </footer>
+
+    <script type="module" src="js/theme.js"></script>
+    <script type="module" src="js/post.js"></script>
+  </body>
+</html>

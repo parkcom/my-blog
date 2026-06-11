@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "css-flexbox-basics",
+    "title": "CSS Flexbox 기초 완전 정복",
+    "date": "2026-06-11",
+    "summary": "display: flex 한 줄로 시작하는 Flexbox 레이아웃 — justify-content, align-items, flex 속성을 실전 예제와 함께 정리했습니다."
+  },
+  {
+    "slug": "what-i-learned-today",
+    "title": "오늘 배운 것",
+    "date": "2026-06-11",
+    "summary": "클로드 코드로 블로그를 만들며 배운 HTML·CSS·JavaScript의 역할을 정리했습니다."
+  },
+  {
+    "slug": "hello-world",
+    "title": "블로그를 시작하며",
+    "date": "2026-06-11",
+    "summary": "마크다운으로 글을 쓰고 정적 사이트로 발행하는 첫 글입니다."
+  },
+  {
+    "slug": "markdown-guide",
+    "title": "마크다운 문법 한눈에 보기",
+    "date": "2026-06-10",
+    "summary": "제목, 목록, 코드 블록, 표, 인용 등 자주 쓰는 마크다운 문법을 모아 봤습니다."
+  }
+]
