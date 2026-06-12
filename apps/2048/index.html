@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2048</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- FOUC 방지: 블로그와 동일한 "theme" 키를 페인트 전 동기로 읽어 확정한다.
+         이 페이지엔 토글 버튼이 없으므로 값을 쓰지 않고 읽기만 한다. -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var theme =
+            saved ||
+            (matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <main class="game">
+      <header class="game-header">
+        <div class="game-title">
+          <h1>2048</h1>
+          <p class="game-subtitle">같은 숫자를 모아 2048을 만드세요</p>
+        </div>
+        <div class="scoreboard" aria-live="polite">
+          <div class="score-box">
+            <span class="score-label">점수</span>
+            <span class="score-value" id="score">0</span>
+          </div>
+          <div class="score-box">
+            <span class="score-label">최고</span>
+            <span class="score-value" id="best">0</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="controls">
+        <p class="hint">방향키 또는 스와이프로 타일을 미세요.</p>
+        <button type="button" id="new-game" class="btn">새 게임</button>
+      </div>
+
+      <div class="board-wrap">
+        <div
+          class="board"
+          id="board"
+          tabindex="0"
+          aria-label="2048 게임판. 방향키로 타일을 밀어 같은 숫자를 합치세요."
+        ></div>
+
+        <div class="overlay" id="overlay" role="status" aria-live="assertive" hidden>
+          <p class="overlay-message" id="overlay-message"></p>
+          <div class="overlay-actions" id="overlay-actions"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="game-footer">
+      <a href="../../index.html" class="back-link">← 블로그로</a>
+    </footer>
+
+    <script type="module" src="game.js"></script>
+  </body>
+</html>

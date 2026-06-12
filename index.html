@@ -79,9 +79,39 @@
     </header>
 
     <main class="page">
-      <ul class="post-list" id="post-list">
-        <li class="state-message">글 목록을 불러오는 중…</li>
-      </ul>
+      <section class="home-section">
+        <h2 class="section-label">미니 웹앱</h2>
+        <ul class="app-list">
+          <li class="app-card">
+            <div class="app-card__preview" aria-hidden="true">
+              <iframe
+                src="apps/2048/"
+                title="2048 게임 미리보기"
+                tabindex="-1"
+                loading="lazy"
+                scrolling="no"
+              ></iframe>
+            </div>
+            <div class="app-card__body">
+              <p class="app-card__kicker">게임</p>
+              <h3 class="app-card__title">2048</h3>
+              <p class="app-card__desc">
+                방향키나 스와이프로 같은 숫자 타일을 밀어 합치는 퍼즐. 점수판과
+                최고 점수 기록을 담았습니다.
+              </p>
+              <span class="app-card__cta">플레이 →</span>
+            </div>
+            <a class="app-card__link" href="apps/2048/" aria-label="2048 게임 열기"></a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="home-section">
+        <h2 class="section-label">글</h2>
+        <ul class="post-list" id="post-list">
+          <li class="state-message">글 목록을 불러오는 중…</li>
+        </ul>
+      </section>
     </main>
 
     <footer class="site-footer">

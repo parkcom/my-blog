@@ -1,0 +1,413 @@
+/* ============================================================
+   2048 — 블로그 편집형(문예지) 톤과 어울리는 독립 스타일
+   색은 모두 변수로 정의하고 컴포넌트는 변수만 참조한다.
+   라이트/다크는 :root / [data-theme="dark"] 한곳에서 토글.
+   ============================================================ */
+
+:root {
+  /* 기본 팔레트 (라이트: 크림 페이퍼) */
+  --bg: #f4efe4;
+  --bg-raised: #faf6ec;
+  --text: #211c17;
+  --muted: #7a6f5f;
+  --faint: #9b9080;
+  --accent: #b5432a;
+  --accent-deep: #8f3520;
+  --rule: #ddd3bf;
+  --rule-strong: #c7bca5;
+
+  /* 보드 / 빈 셀 */
+  --board-bg: #e7ddca;
+  --cell-bg: #f1eadb;
+
+  /* 타일 팔레트 — 낮은 값은 크림, 높을수록 러스트/앰버, 글자는 점점 밝게 */
+  --tile-2-bg: #efe5d2;
+  --tile-2-fg: #4a4032;
+  --tile-4-bg: #ecdcc0;
+  --tile-4-fg: #4a4032;
+  --tile-8-bg: #e7b27e;
+  --tile-8-fg: #3a2a18;
+  --tile-16-bg: #e09a5c;
+  --tile-16-fg: #2e1d0e;
+  --tile-32-bg: #d97f4a;
+  --tile-32-fg: #fff8ef;
+  --tile-64-bg: #cf6336;
+  --tile-64-fg: #fff8ef;
+  --tile-128-bg: #c94f2b;
+  --tile-128-fg: #fff8ef;
+  --tile-256-bg: #bd3f24;
+  --tile-256-fg: #fff8ef;
+  --tile-512-bg: #a8331e;
+  --tile-512-fg: #fff8ef;
+  --tile-1024-bg: #8f2c1c;
+  --tile-1024-fg: #fff8ef;
+  --tile-2048-bg: #7a2417;
+  --tile-2048-fg: #ffe9c4;
+  --tile-super-bg: #1d1813;
+  --tile-super-fg: #f0d9a8;
+
+  --font-display: "Fraunces", "Noto Serif KR", Georgia, serif;
+  --font-body: "Newsreader", "Noto Serif KR", Georgia, serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #16120e;
+  --bg-raised: #1d1813;
+  --text: #ece3d4;
+  --muted: #a99c89;
+  --faint: #7d7160;
+  --accent: #e07043;
+  --accent-deep: #c2542c;
+  --rule: #2e271f;
+  --rule-strong: #41382d;
+
+  --board-bg: #221c15;
+  --cell-bg: #2a2219;
+
+  --tile-2-bg: #34291d;
+  --tile-2-fg: #e6d8c2;
+  --tile-4-bg: #3e2f1e;
+  --tile-4-fg: #ecdcc0;
+  --tile-8-bg: #7a4a26;
+  --tile-8-fg: #ffe9c4;
+  --tile-16-bg: #8f5527;
+  --tile-16-fg: #ffe9c4;
+  --tile-32-bg: #a85f29;
+  --tile-32-fg: #fff3df;
+  --tile-64-bg: #bf5e2c;
+  --tile-64-fg: #fff3df;
+  --tile-128-bg: #c85630;
+  --tile-128-fg: #fff3df;
+  --tile-256-bg: #cf4e2b;
+  --tile-256-fg: #fff3df;
+  --tile-512-bg: #c24023;
+  --tile-512-fg: #fff3df;
+  --tile-1024-bg: #aa341f;
+  --tile-1024-fg: #fff3df;
+  --tile-2048-bg: #e07043;
+  --tile-2048-fg: #1a1109;
+  --tile-super-bg: #f0d9a8;
+  --tile-super-fg: #1a1109;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-image: radial-gradient(
+    120% 80% at 50% -10%,
+    color-mix(in oklab, var(--accent) 6%, transparent),
+    transparent 60%
+  );
+  background-attachment: fixed;
+}
+
+/* ============================================================
+   레이아웃
+   ============================================================ */
+.game {
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 1.5rem;
+  flex: 1 0 auto;
+}
+
+.game-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  border-top: 3px solid var(--accent);
+  padding-top: 1.2rem;
+}
+
+.game-title h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 1.6rem + 3vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.game-subtitle {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* 점수판 */
+.scoreboard {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4.5rem;
+  padding: 0.5rem 0.9rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+}
+
+.score-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.score-value {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+/* 컨트롤 */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--faint);
+}
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--bg-raised);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn:hover {
+  background: var(--accent-deep);
+  border-color: var(--accent-deep);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* ============================================================
+   보드
+   ============================================================ */
+.board-wrap {
+  position: relative;
+  width: min(92vmin, 460px);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+}
+
+.board {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: clamp(0.4rem, 2.2vmin, 0.75rem);
+  padding: clamp(0.4rem, 2.2vmin, 0.75rem);
+  background: var(--board-bg);
+  border: 1px solid var(--rule-strong);
+  border-radius: 8px;
+  /* 스와이프 시 페이지 스크롤·당겨서 새로고침 방지 */
+  touch-action: none;
+}
+.board:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* 빈 셀 배경 (그리드 셀 16개) */
+.cell {
+  background: var(--cell-bg);
+  border-radius: 5px;
+}
+
+/* 타일 */
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  /* 자릿수에 따라 글자 크기 자동 축소 */
+  font-size: clamp(1.1rem, 7vmin, 2.1rem);
+  line-height: 1;
+  background: var(--tile-2-bg);
+  color: var(--tile-2-fg);
+}
+
+.tile-2 { background: var(--tile-2-bg); color: var(--tile-2-fg); }
+.tile-4 { background: var(--tile-4-bg); color: var(--tile-4-fg); }
+.tile-8 { background: var(--tile-8-bg); color: var(--tile-8-fg); }
+.tile-16 { background: var(--tile-16-bg); color: var(--tile-16-fg); }
+.tile-32 { background: var(--tile-32-bg); color: var(--tile-32-fg); }
+.tile-64 { background: var(--tile-64-bg); color: var(--tile-64-fg); }
+.tile-128 { background: var(--tile-128-bg); color: var(--tile-128-fg); font-size: clamp(0.95rem, 5.8vmin, 1.7rem); }
+.tile-256 { background: var(--tile-256-bg); color: var(--tile-256-fg); font-size: clamp(0.95rem, 5.8vmin, 1.7rem); }
+.tile-512 { background: var(--tile-512-bg); color: var(--tile-512-fg); font-size: clamp(0.95rem, 5.8vmin, 1.7rem); }
+.tile-1024 { background: var(--tile-1024-bg); color: var(--tile-1024-fg); font-size: clamp(0.8rem, 4.6vmin, 1.35rem); }
+.tile-2048 { background: var(--tile-2048-bg); color: var(--tile-2048-fg); font-size: clamp(0.8rem, 4.6vmin, 1.35rem); }
+.tile-super { background: var(--tile-super-bg); color: var(--tile-super-fg); font-size: clamp(0.7rem, 4vmin, 1.2rem); }
+
+/* 등장 / 병합 애니메이션 */
+.tile--new {
+  animation: pop-in 0.12s ease;
+}
+.tile--merged {
+  animation: pop-merge 0.15s ease;
+}
+
+@keyframes pop-in {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+@keyframes pop-merge {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================================
+   오버레이 (승리 / 게임오버)
+   ============================================================ */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  border-radius: 8px;
+  text-align: center;
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(2px);
+  animation: fade-in 0.3s ease;
+}
+.overlay[hidden] {
+  display: none;
+}
+
+.overlay-message {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 1.2rem + 4vw, 2.6rem);
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+
+.overlay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================================
+   푸터
+   ============================================================ */
+.game-footer {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+.back-link {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.back-link:hover {
+  color: var(--accent);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   반응형
+   ============================================================ */
+@media (max-width: 30rem) {
+  .game {
+    padding-top: 1.75rem;
+  }
+  .game-header {
+    align-items: flex-start;
+  }
+  .scoreboard {
+    width: 100%;
+  }
+  .score-box {
+    flex: 1;
+  }
+}
+
+/* 모션 최소화 선호 시 애니메이션 억제 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -204,6 +204,132 @@ body::before {
 }
 
 /* ============================================================
+   홈 — 섹션 레이블
+   ============================================================ */
+.home-section + .home-section {
+  margin-top: 4rem;
+}
+.section-label {
+  margin: 0 0 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+}
+
+/* ============================================================
+   홈 — 미니 웹앱 카드
+   ============================================================ */
+.app-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.app-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--bg-raised);
+  overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.app-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 22px 50px -30px rgba(0, 0, 0, 0.55);
+}
+
+/* 라이브 미리보기(클릭은 카드 링크가 받음) */
+.app-card__preview {
+  position: relative;
+  border-right: 1px solid var(--rule);
+  background: var(--bg);
+  height: 100%;
+  min-height: 220px;
+  overflow: hidden;
+}
+.app-card__preview iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%) scale(0.5);
+  transform-origin: center;
+  border: 0;
+  pointer-events: none;
+}
+
+.app-card__body {
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.app-card__kicker {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  color: var(--accent);
+}
+.app-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 550;
+  font-size: clamp(1.7rem, 1.2rem + 1.8vw, 2.3rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 72;
+}
+.app-card__desc {
+  margin: 0.3rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.app-card__cta {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text);
+  transition: color 0.2s ease;
+}
+.app-card:hover .app-card__cta {
+  color: var(--accent);
+}
+
+/* 카드 전체를 클릭 영역으로 (스트레치드 링크) */
+.app-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+@media (max-width: 34rem) {
+  .app-card {
+    grid-template-columns: 1fr;
+  }
+  .app-card__preview {
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    min-height: 180px;
+  }
+}
+
+/* ============================================================
    홈 — 편집형 글 목차
    ============================================================ */
 .post-list {
