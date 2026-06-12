@@ -214,12 +214,22 @@ function savePNG() {
     a.href = url;
     a.download = "pixel-art.png";
     a.click();
-    URL.revokeObjectURL(url);
+    // 일부 브라우저는 click 이후 비동기로 다운로드를 시작하므로
+    // 같은 태스크에서 해제하면 다운로드가 취소될 수 있다 → 다음 태스크로 미룬다.
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   }, "image/png");
 }
 
 // ---- 테마 토글 (블로그와 동일 "theme" 키, 로직 자체 포함) ----
+function syncThemePressed() {
+  // 현재 다크 여부를 aria-pressed로 노출(스크린리더가 상태를 알 수 있게).
+  const isDark =
+    document.documentElement.getAttribute("data-theme") === "dark";
+  themeToggle.setAttribute("aria-pressed", String(isDark));
+}
+
 function initTheme() {
+  syncThemePressed();
   themeToggle.addEventListener("click", () => {
     const next =
       document.documentElement.getAttribute("data-theme") === "dark"
@@ -231,6 +241,7 @@ function initTheme() {
     } catch {
       // 프라이빗 모드 등 차단 환경에서도 토글 자체는 동작.
     }
+    syncThemePressed();
   });
 }
 

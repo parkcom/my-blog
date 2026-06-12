@@ -524,8 +524,8 @@ body::before {
   margin-top: 0;
 }
 
-/* 첫 문단 드롭캡 */
-.post-content > p:first-of-type::first-letter {
+/* 첫 문단 드롭캡 (로딩/에러 상태 메시지는 제외) */
+.post-content > p:not(.state-message):first-of-type::first-letter {
   float: left;
   font-family: var(--font-display);
   font-weight: 600;

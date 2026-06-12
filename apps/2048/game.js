@@ -307,13 +307,23 @@ function move(dir) {
   if (!won && hasValue(board, WIN_VALUE)) {
     won = true;
     showOverlay("2048 달성!", [
-      { label: "계속하기", onClick: hideOverlay },
+      { label: "계속하기", onClick: continueAfterWin },
       { label: "새 게임", onClick: startGame },
     ]);
     return;
   }
 
   // 게임오버
+  if (!canMove(board)) {
+    over = true;
+    showOverlay("게임 오버", [{ label: "다시 시작", onClick: startGame }]);
+  }
+}
+
+// 승리 후 "계속하기": 그 수가 보드를 꽉 채워 더 둘 수 없으면
+// (no-op 게이트 때문에 이후 키 입력으로는 감지되지 않으므로) 여기서 게임오버 처리.
+function continueAfterWin() {
+  hideOverlay();
   if (!canMove(board)) {
     over = true;
     showOverlay("게임 오버", [{ label: "다시 시작", onClick: startGame }]);

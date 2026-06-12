@@ -3,7 +3,10 @@
 const listEl = document.getElementById("post-list");
 
 function formatDate(iso) {
-  const d = new Date(iso);
+  // "YYYY-MM-DD"는 UTC 자정으로 해석돼 음수 시간대에서 하루 당겨진다.
+  // 로컬 캘린더 날짜로 직접 파싱해 독자 시간대와 무관하게 표시한다.
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  const d = m ? new Date(+m[1], +m[2] - 1, +m[3]) : new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleDateString("ko-KR", {
     year: "numeric",

@@ -19,12 +19,19 @@ function applyTheme(theme) {
   }
 }
 
+function syncPressed(button) {
+  // 현재 다크 여부를 aria-pressed로 노출(스크린리더가 상태를 알 수 있게).
+  button.setAttribute("aria-pressed", String(currentTheme() === "dark"));
+}
+
 export function initThemeToggle() {
   const button = document.querySelector(".theme-toggle");
   if (!button) return;
 
+  syncPressed(button);
   button.addEventListener("click", () => {
     applyTheme(currentTheme() === "dark" ? "light" : "dark");
+    syncPressed(button);
   });
 }
 
